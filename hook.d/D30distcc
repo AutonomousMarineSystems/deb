@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DEB_BUILD_GNU_TYPE=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+echo "/usr/lib/distcc/$DEB_BUILD_GNU_TYPE-gcc-4.4" '$@' > /usr/local/bin/invoke-distcc-gcc
+chmod a+x /usr/local/bin/invoke-distcc-gcc
+echo "/usr/lib/distcc/$DEB_BUILD_GNU_TYPE-g++-4.4" '$@' > /usr/local/bin/invoke-distcc-g++
+chmod a+x /usr/local/bin/invoke-distcc-g++

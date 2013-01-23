@@ -1,0 +1,7 @@
+#!/bin/sh
+# invoke shell if build fails.
+
+apt-get install -y --force-yes zile less bash
+cd /tmp/buildd/*/debian/..
+/bin/bash < /dev/tty > /dev/tty 2> /dev/tty
+

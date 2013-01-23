@@ -1,0 +1,19 @@
+# mirrors
+DEBIAN_MIRROR=mirrors.mit.edu
+MIRRORSITE="http://$DEBIAN_MIRROR/debian/"
+OTHERMIRROR="deb file:///var/cache/archive squeeze/"
+
+# distcc
+# export CCACHE_PREFIX="distcc"
+export DISTCC_HOSTS="localhost"
+export DISTCC_DIR="/tmp/buildd/.distcc"
+
+# these scripts are created by deb/hook.d/
+export CC="/usr/local/bin/invoke-distcc-gcc"
+export CXX="/usr/local/bin/invoke-distcc-g++"
+
+# hooks
+HOOKDIR="$HOME/deb/hook.d"
+
+# extra packages for the chroot
+EXTRAPACKAGES=distcc
