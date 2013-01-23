@@ -4,5 +4,6 @@ pbuilder/**/*.tgz
 pbuilder/**/*.dsc
 pbuilder/**/*.changes
 pbuilder/**/*.diff.gz
+pbuilder/**/*.upload
 
 
