@@ -7,3 +7,13 @@ pbuilder/**/*.diff.gz
 pbuilder/**/*.upload
 
 
+src/hello-2.7
+src/hello_2.7-2.debian.tar.gz
+src/hello_2.7-2.dsc
+src/hello_2.7-2_source.build
+src/hello_2.7-2_source.changes
+src/hello_2.7-2~tes1.debian.tar.gz
+src/hello_2.7-2~tes1.dsc
+src/hello_2.7-2~tes1_source.build
+src/hello_2.7-2~tes1_source.changes
+src/hello_2.7.orig.tar.gz
