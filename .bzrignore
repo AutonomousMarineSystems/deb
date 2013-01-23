@@ -1,0 +1,8 @@
+pbuilder/**/*.deb
+pbuilder/**/*.tar.gz
+pbuilder/**/*.tgz
+pbuilder/**/*.dsc
+pbuilder/**/*.changes
+pbuilder/**/*.diff.gz
+
+
