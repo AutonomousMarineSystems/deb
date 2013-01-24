@@ -1,6 +1,5 @@
 # mirrors
-DEBIAN_MIRROR=mirrors.mit.edu
-MIRRORSITE="http://$DEBIAN_MIRROR/debian/"
+
 OTHERMIRROR="deb file:///var/cache/archive squeeze/"
 
 # distcc
