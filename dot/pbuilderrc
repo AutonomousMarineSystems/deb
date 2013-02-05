@@ -1,6 +1,6 @@
 # mirrors
 
-OTHERMIRROR="deb file:///var/cache/archive squeeze/"
+export OTHERMIRROR="deb file:///var/cache/archive $DIST/"
 
 # distcc
 # export CCACHE_PREFIX="distcc"
