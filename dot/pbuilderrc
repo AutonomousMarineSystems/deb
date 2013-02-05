@@ -1,5 +1,4 @@
 # mirrors
-
 export OTHERMIRROR="deb file:///var/cache/archive $DIST/"
 
 # distcc
@@ -16,3 +15,5 @@ HOOKDIR="$HOME/deb/hook.d"
 
 # extra packages for the chroot
 EXTRAPACKAGES=distcc
+
+ALLOWUNTRUSTED=yes
