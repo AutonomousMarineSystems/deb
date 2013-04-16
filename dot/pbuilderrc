@@ -3,7 +3,7 @@ export OTHERMIRROR="deb file:///var/cache/archive $DIST/"
 
 # distcc
 # export CCACHE_PREFIX="distcc"
-export DISTCC_HOSTS="localhost"
+export DISTCC_HOSTS="127.0.0.1"
 export DISTCC_DIR="/tmp/buildd/.distcc"
 
 # these scripts are created by deb/hook.d/

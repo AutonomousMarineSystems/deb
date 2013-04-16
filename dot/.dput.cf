@@ -4,3 +4,11 @@ method = local
 incoming = /var/cache/archive/mini-dinstall/incoming
 allow_unsigned_uploads = 1
 post_upload_command = mini-dinstall --batch
+
+[gobysoft]
+fqdn = ubuntu@gobysoft.org
+method = scp
+incoming = /var/cache/archive/mini-dinstall/incoming
+allow_unsigned_uploads = 1
+post_upload_command = ssh -o IdentityFile=/home/toby/documents/dot/amazonkeypair.pem ubuntu@gobysoft.org /usr/bin/mini-dinstall --batch
+ssh_config_options = IdentityFile=/home/toby/documents/dot/amazonkeypair.pem

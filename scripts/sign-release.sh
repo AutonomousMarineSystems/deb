@@ -27,26 +27,10 @@
 
 set -e 
 
-# User variables
-# MAKE SURE TO MAKE THIS DIRECTORY 0700!
-export GNUPGHOME=/var/cache/archive/mini-dinstall/s3kr1t
-if [ ! -d "$GNUPGHOME" ]; then
-  mkdir -p "$GNUPGHOME"
-fi
-if [ -z "$USER" ]; then
-    USER=$(id -n -u)
-fi
-
-KEYID=0D83827F
-PASSPHRASE=$(cat "$GNUPGHOME/passphrase")
-
-# These should fail if for some reason the directory isn't owned by us
-chown "$USER" "$GNUPGHOME"
-chmod 0700 "$GNUPGHOME"
 
 # Initialize GPG
 gpg --help 1>/dev/null 2>&1 || true
 
 rm -f Release.gpg.tmp
-echo "$PASSPHRASE" | gpg --no-tty --batch --passphrase-fd=0 --default-key "$KEYID" --detach-sign -o Release.gpg.tmp "$1"
+gpg -abs -o Release.gpg.tmp "$1"
 mv Release.gpg.tmp Release.gpg
