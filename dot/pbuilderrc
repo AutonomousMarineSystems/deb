@@ -2,18 +2,20 @@
 export OTHERMIRROR="deb file:///var/cache/archive $DIST/"
 
 # distcc
-# export CCACHE_PREFIX="distcc"
+export CCACHE_PREFIX="distcc"
 export DISTCC_HOSTS="127.0.0.1"
 export DISTCC_DIR="/tmp/buildd/.distcc"
 
 # these scripts are created by deb/hook.d/
-export CC="/usr/local/bin/invoke-distcc-gcc"
-export CXX="/usr/local/bin/invoke-distcc-g++"
+export CC="/usr/local/bin/ccache-distcc-gcc"
+export CXX="/usr/local/bin/ccache-distcc-g++"
 
 # hooks
 HOOKDIR="$HOME/deb/hook.d"
 
 # extra packages for the chroot
-EXTRAPACKAGES=distcc
+EXTRAPACKAGES="distcc ccache"
 
 ALLOWUNTRUSTED=yes
+APTCACHEHARDLINK=no
+MIRRORSITE=http://mirrors.mit.edu/ubuntu/

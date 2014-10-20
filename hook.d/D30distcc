@@ -5,11 +5,11 @@ DEB_BUILD_GNU_TYPE=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 GCC_VERSION=$(gcc -dumpversion | cut -d "." -f 1-2)
 #GCC_VERSION=-4.4
 
-echo "/usr/lib/distcc/$DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION" '$@' > /usr/local/bin/invoke-distcc-gcc
-chmod a+x /usr/local/bin/invoke-distcc-gcc
+echo "/usr/bin/ccache $DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION" '$@' > /usr/local/bin/ccache-distcc-gcc
+chmod a+x /usr/local/bin/ccache-distcc-gcc
 
-echo "/usr/lib/distcc/$DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION" '$@' > /usr/local/bin/invoke-distcc-g++
-chmod a+x /usr/local/bin/invoke-distcc-g++
+echo "/usr/bin/ccache $DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION" '$@' > /usr/local/bin/ccache-distcc-g++
+chmod a+x /usr/local/bin/ccache-distcc-g++
 
-ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION
-ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION
+#ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION
+#ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION
