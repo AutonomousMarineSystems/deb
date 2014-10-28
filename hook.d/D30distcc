@@ -11,5 +11,6 @@ chmod a+x /usr/local/bin/ccache-distcc-gcc
 echo "/usr/bin/ccache $DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION" '$@' > /usr/local/bin/ccache-distcc-g++
 chmod a+x /usr/local/bin/ccache-distcc-g++
 
+
 #ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION
 #ln -s -f /usr/bin/distcc /usr/lib/distcc/$DEB_BUILD_GNU_TYPE-g++-$GCC_VERSION
