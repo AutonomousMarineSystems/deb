@@ -32,5 +32,5 @@ set -e
 gpg --help 1>/dev/null 2>&1 || true
 
 rm -f Release.gpg.tmp
-gpg -abs -o Release.gpg.tmp "$1"
+cat /var/cache/archive/mini-dinstall/file | gpg --passphrase-fd 0 --batch --default-key "toby@gobysoft.org" -abs -o Release.gpg.tmp "$1"
 mv Release.gpg.tmp Release.gpg

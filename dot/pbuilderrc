@@ -1,5 +1,5 @@
 # mirrors
-export OTHERMIRROR="deb file:///var/cache/archive $DIST/"
+export OTHERMIRROR="deb file:///var/cache/archive $DIST/ | deb http://ppa.launchpad.net/tes/ams/ubuntu $DIST main"
 
 # distcc
 export CCACHE_PREFIX="distcc"
@@ -19,15 +19,15 @@ HOOKDIR="$HOME/deb/hook.d"
 # extra packages for the chroot
 EXTRAPACKAGES="distcc ccache"
 
-ALLOWUNTRUSTED=yes
+ALLOWUNTRUSTED=no
 APTCACHEHARDLINK=no
 
 DEBIAN_MIRROR="mirrors.mit.edu"
 UBUNTU_MIRROR="mirrors.mit.edu"
 
-DEBIAN_SUITES=("squeeze" "wheezy")
+DEBIAN_SUITES=("jessie")
 
-UBUNTU_SUITES=("lucid" "precise" "trusty" "utopic")
+UBUNTU_SUITES=("trusty" "xenial")
 
 if $(echo ${DEBIAN_SUITES[@]} | grep -q $DIST); then
     # Debian configuration

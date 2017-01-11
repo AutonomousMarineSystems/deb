@@ -1,0 +1,4 @@
+#!/bin/sh
+
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE54CBF4
+
