@@ -2,8 +2,14 @@
 
 DEB_BUILD_GNU_TYPE=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-GCC_VERSION=$(gcc -dumpversion | cut -d "." -f 1-2)
+GCC_VERSION=$(/usr/bin/gcc -dumpversion | cut -d "." -f 1-2)
 #GCC_VERSION=-4.4
+
+#change in symlink naming for GCC 5
+if dpkg --compare-versions $GCC_VERSION gt 5;
+then
+    GCC_VERSION=5
+fi
 
 echo "/usr/bin/ccache $DEB_BUILD_GNU_TYPE-gcc-$GCC_VERSION" '$@' > /usr/local/bin/ccache-distcc-gcc
 chmod a+x /usr/local/bin/ccache-distcc-gcc

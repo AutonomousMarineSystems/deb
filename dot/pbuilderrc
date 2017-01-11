@@ -20,14 +20,21 @@ HOOKDIR="$HOME/deb/hook.d"
 EXTRAPACKAGES="distcc ccache"
 
 ALLOWUNTRUSTED=yes
+
 APTCACHEHARDLINK=no
 
-DEBIAN_MIRROR="mirrors.mit.edu"
-UBUNTU_MIRROR="mirrors.mit.edu"
+#DEBIAN_MIRROR="mirrors.mit.edu"
+DEBIAN_MIRROR="archive.debian.org"
 
-DEBIAN_SUITES=("squeeze" "wheezy")
+if [[ $ARCH == "armhf" || $ARCH == "arm64" ]]; then
+   UBUNTU_MIRROR="ports.ubuntu.com"
+else
+   UBUNTU_MIRROR="mirrors.mit.edu/ubuntu"
+fi
 
-UBUNTU_SUITES=("lucid" "precise" "trusty" "utopic")
+DEBIAN_SUITES=("etch" "squeeze" "wheezy" "jessie")
+
+UBUNTU_SUITES=("lucid" "precise" "trusty" "utopic" "wily" "xenial")
 
 if $(echo ${DEBIAN_SUITES[@]} | grep -q $DIST); then
     # Debian configuration
@@ -36,7 +43,7 @@ if $(echo ${DEBIAN_SUITES[@]} | grep -q $DIST); then
     DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/debian-archive-keyring.gpg")
 elif $(echo ${UBUNTU_SUITES[@]} | grep -q $DIST); then
     # Ubuntu configuration
-    MIRRORSITE="http://$UBUNTU_MIRROR/ubuntu/"
+    MIRRORSITE="http://$UBUNTU_MIRROR/"
     COMPONENTS="main restricted universe multiverse"
     DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg")
 else
