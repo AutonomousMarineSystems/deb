@@ -3,21 +3,24 @@ export OTHERMIRROR="deb file:///var/cache/archive $DIST/ | deb http://ppa.launch
 
 # distcc
 export CCACHE_PREFIX="distcc"
-CCACHEDIR=/var/cache/pbuilder/ccache
+export CCACHEDIR=/var/cache/pbuilder/ccache
 
-export DISTCC_HOSTS="127.0.0.1"
+export DISTCC_HOSTS="192.168.143.127/8 127.0.0.1/8"
 export DISTCC_DIR="/tmp/buildd/.distcc"
+export DISTCC_VERBOSE=1
+export DISTCC_FALLBACK=0
 
 # these scripts are created by deb/hook.d/
-export CC="/usr/local/bin/ccache-distcc-gcc"
-export CXX="/usr/local/bin/ccache-distcc-g++"
+#export CC="/usr/local/bin/ccache-distcc-gcc"
+#export CXX="/usr/local/bin/ccache-distcc-g++"
 
 
 # hooks
 HOOKDIR="$HOME/deb/hook.d"
 
 # extra packages for the chroot
-EXTRAPACKAGES="distcc ccache"
+#EXTRAPACKAGES="distcc ccache"
+EXTRAPACKAGES="distcc"
 
 ALLOWUNTRUSTED=no
 APTCACHEHARDLINK=no

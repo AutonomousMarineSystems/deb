@@ -1,6 +1,0 @@
-#!/bin/bash
-
-mkdir -p /tmp/buildd/.distcc
-chmod a+rwx /tmp/buildd/.distcc
-
-chmod -R a+rwx /var/cache/pbuilder/ccache
