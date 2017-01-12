@@ -1,0 +1,76 @@
+#!/bin/bash
+
+if [ -z "$archs" ]; then
+    archs="armhf amd64 i386"
+fi
+
+if [ -z "$dists" ]; then
+    dists="trusty xenial"
+fi
+
+echo "Archs: " $archs
+echo "Dists: " $dists
+
+DSC=$1
+EXIT_CODE=0
+
+if [[ ! $DSC =~ \.dsc$ ]]; then
+    echo "Must specify .dsc file" && exit 1
+fi
+
+if [ ! -e $DSC ]; then
+    echo "File does not exist: $DSC" && exit 1
+fi
+
+DSC_no_ext=${DSC%.dsc}
+DSC_no_path=${DSC_no_ext##*/}
+PACKAGE=`echo $DSC_no_path | cut -d "_" -f1`
+
+declare -A PID
+declare -A DONE
+
+for dist in $dists; do
+    for arch in $archs; do
+	
+	if [[ $arch == "armhf" ]]; then
+	    export DEB_BUILD_OPTIONS="parallel=`nproc` nocheck"
+	else
+	    export DEB_BUILD_OPTIONS="parallel=`nproc`"
+	fi 
+
+	if [[ $arch == "amd64" ]]; then
+	    sbuild_command="sbuild -A -d $dist-amd64"
+	else
+	    sbuild_command="sbuild -A -d $dist-amd64-$arch --host $arch"
+	fi
+	
+	    
+	screen -L -S "$PACKAGE-$dist-$arch" -D -m bash -c "$sbuild_command --extra-repository='deb http://ppa.launchpad.net/tes/ams/ubuntu $dist main' --build-dep-resolver=aptitude $DSC && echo 0 > /tmp/ams_${dist}_${arch}_sbuild_result || echo 1 > /tmp/ams_${dist}_${arch}_sbuild_result" &
+	PID[$dist$arch]=$!
+	DONE[$dist$arch]=0
+
+	echo "Launched build of $DSC for $dist $arch"
+	while ps -p ${PID[$dist$arch]} > /dev/null; do
+	    sleep 1
+	done    
+	success=$(cat /tmp/ams_${dist}_${arch}_sbuild_result)
+	if [[ $success == 0 ]]; then
+	    success_str="success"
+	else
+	    success_str="failure"
+	    EXIT_CODE=1
+	fi	  
+	echo "COMPLETED $dist $arch: $success_str"  
+	
+	datestr=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+	logfile=${DSC_no_path}_${datestr}.log
+	mv screenlog.0 /var/www/html/build/$logfile
+
+	echo "===== DPUT =====" >> /var/www/html/build/$logfile
+	/home/ubuntu/deb/scripts/ams_dput.sh >> /var/www/html/build/$logfile
+
+	echo -e "$dist $arch build of $DSC was a $success_str. $logfile" | slacktee.sh -c "@tsaubergine"
+    done 
+done
+
+exit $EXIT_CODE
