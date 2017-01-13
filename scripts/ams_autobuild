@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# don't restart if running
+num_running=$(/usr/bin/pgrep -c ams_autobuild)
+if [[ $num_running > 1 ]]; then
+    exit 0
+fi
+
+declare -A LASTREVNO
+declare -A CURRENTREVNO
+
+repos="ams-core"
+
+autobuild() {
+    local autorepo=$1
+    rm -rf /home/ubuntu/deb/src/${autorepo}-working
+
+    git-build-recipe --allow-fallback-to-native /home/ubuntu/deb/recipes/${autorepo} /home/ubuntu/deb/src/${autorepo}-working
+    
+    pushd /home/ubuntu/deb/src/${autorepo}-working >& /dev/null
+    archs="armhf amd64" dists="trusty" /home/ubuntu/deb/scripts/ams_sbuild *.dsc
+    local return_code=$?
+    popd >& /dev/null
+    return $return_code
+}
+
+for repo in $repos; do
+    revno_file=/home/ubuntu/deb/src/last-build-revno/$repo
+    if [ ! -e $revno_file ]; then
+	echo "0" > $revno_file
+    fi
+    LASTREVNO[$repo]=$(cat $revno_file)
+
+    git --git-dir=/var/www/${repo}.git rev-parse HEAD > $revno_file
+
+    CURRENTREVNO[$repo]=$(cat $revno_file)
+
+    if [[ ${LASTREVNO[$repo]} != ${CURRENTREVNO[$repo]} ]]; then
+	echo "Building $repo to bring revno from ${LASTREVNO[$repo]} to ${CURRENTREVNO[$repo]}"
+	autobuild $repo || exit 1
+    fi
+done

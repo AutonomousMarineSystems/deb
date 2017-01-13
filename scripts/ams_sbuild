@@ -32,11 +32,7 @@ declare -A DONE
 for dist in $dists; do
     for arch in $archs; do
 	
-	if [[ $arch == "armhf" ]]; then
-	    export DEB_BUILD_OPTIONS="parallel=`nproc` nocheck"
-	else
-	    export DEB_BUILD_OPTIONS="parallel=`nproc`"
-	fi 
+	export DEB_BUILD_OPTIONS="parallel=`nproc`"
 
 	if [[ $arch == "amd64" ]]; then
 	    sbuild_command="sbuild -A -d $dist-amd64"
@@ -44,7 +40,8 @@ for dist in $dists; do
 	    sbuild_command="sbuild -A -d $dist-amd64-$arch --host $arch"
 	fi
 	
-	    
+
+	rm -f screenlog.0
 	screen -L -S "$PACKAGE-$dist-$arch" -D -m bash -c "$sbuild_command --extra-repository='deb http://ppa.launchpad.net/tes/ams/ubuntu $dist main' --build-dep-resolver=aptitude $DSC && echo 0 > /tmp/ams_${dist}_${arch}_sbuild_result || echo 1 > /tmp/ams_${dist}_${arch}_sbuild_result" &
 	PID[$dist$arch]=$!
 	DONE[$dist$arch]=0
@@ -56,20 +53,23 @@ for dist in $dists; do
 	success=$(cat /tmp/ams_${dist}_${arch}_sbuild_result)
 	if [[ $success == 0 ]]; then
 	    success_str="success"
+	    slack_mode="good"
 	else
 	    success_str="failure"
+	    slack_mode="danger"
 	    EXIT_CODE=1
 	fi	  
 	echo "COMPLETED $dist $arch: $success_str"  
 	
 	datestr=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-	logfile=${DSC_no_path}_${datestr}.log
-	mv screenlog.0 /var/www/html/build/$logfile
+	logfile=${DSC_no_path}_${datestr}.html
 
-	echo "===== DPUT =====" >> /var/www/html/build/$logfile
-	/home/ubuntu/deb/scripts/ams_dput.sh >> /var/www/html/build/$logfile
+	echo "===== DPUT =====" >> screenlog.0
+	/home/ubuntu/deb/scripts/ams_dput.sh >> screenlog.0
 
-	echo -e "$dist $arch build of $DSC was a $success_str. $logfile" | slacktee.sh -c "@tsaubergine"
+	cat screenlog.0 | aha > /var/www/html/build/$logfile
+
+	echo -e "$dist $arch build of $DSC was a $success_str." | slacktee.sh -c "@tsaubergine" -l http://192.168.143.118/build/$logfile -a $slack_mode
     done 
 done
 
