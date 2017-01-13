@@ -13,5 +13,10 @@ $build_dir='/home/ubuntu/deb/sbuild/build';
 # Directory for writing build logs to
 $log_dir="/home/ubuntu/deb/sbuild/logs";
 
+
+$build_environment = {
+      'DEB_BUILD_OPTIONS' => 'parallel=6'
+};
+
 # don't remove this, Perl needs it:
 1;
