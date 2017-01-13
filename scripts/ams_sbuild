@@ -68,7 +68,7 @@ for dist in $dists; do
 
 	cat screenlog.0 | aha > /var/www/html/build/$logfile
 
-	( echo -e "$dist $arch build of $DSC was a $success_str."; grep '\-Time: ' /var/www/html/build/$logfile ) | slacktee.sh -c "autobuild" -l http://192.168.143.118/build/$logfile -a $slack_mode
+	( echo -e "$dist $arch build of $DSC was a $success_str."; grep '\-Time: ' /var/www/html/build/$logfile ) | slacktee.sh -c "autobuild" -l http://52.73.204.238/build/$logfile -a $slack_mode
     done 
 done
 
