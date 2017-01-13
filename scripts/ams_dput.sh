@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd /home/ubuntu/ubuntu/build >& /dev/null
+pushd /home/ubuntu/deb/sbuild/build >& /dev/null
 for i in *.changes; do
     j=$(echo $i | sed s/.changes//);
     if [ ! -e $j.local.upload ]; then 
