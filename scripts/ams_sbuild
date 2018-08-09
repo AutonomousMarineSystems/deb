@@ -37,10 +37,16 @@ for dist in $dists; do
 	else
 	    sbuild_command="sbuild -A -d $dist-amd64-$arch --host $arch"
 	fi
-	
 
 	rm -f screenlog.0
-	screen -L -S "$PACKAGE-$dist-$arch" -D -m bash -c "$sbuild_command --extra-repository='deb http://ppa.launchpad.net/tes/ams/ubuntu $dist main' --build-dep-resolver=aptitude $DSC && echo 0 > /tmp/ams_${dist}_${arch}_sbuild_result || echo 1 > /tmp/ams_${dist}_${arch}_sbuild_result" &
+
+	args=""
+	args+=" --build-dep-resolver=aptitude "
+	args+=" --apt-update "
+	args+=" --extra-repository-key=/home/ubuntu/ams-ppa.asc "
+	args+=" --extra-repository=\"deb [truested=yes] http://ppa.launchpad.net/automarinesys/ppa/ubuntu ${dist} main\" "
+
+	screen -L -S "$PACKAGE-$dist-$arch" -D -m bash -c "$sbuild_command $args $DSC && echo 0 > /tmp/ams_${dist}_${arch}_sbuild_result || echo 1 > /tmp/ams_${dist}_${arch}_sbuild_result" &
 	PID[$dist$arch]=$!
 	DONE[$dist$arch]=0
 
@@ -64,11 +70,11 @@ for dist in $dists; do
 	logfile=${DSC_no_path}_${datestr}.html
 
 	echo "===== DPUT =====" >> screenlog.0
-	/home/ubuntu/deb/scripts/ams_dput.sh >> screenlog.0
+	#sudo /home/ubuntu/deb/scripts/ams_dput.sh >> screenlog.0
 
 	cat screenlog.0 | aha > /var/www/html/build/$logfile
 
-	( echo -e "$dist $arch build of $DSC was a $success_str."; grep '\-Time: ' /var/www/html/build/$logfile ) | slacktee.sh -c "autobuild" -l http://build.automarinesys.com/build/$logfile -a $slack_mode
+	( echo -e "$dist $arch build of $DSC was a $success_str."; grep '\-Time: ' /var/www/html/build/$logfile ) | /usr/local/bin/slacktee.sh -c "autobuild" -l http://build.automarinesys.com/build/$logfile -a $slack_mode
     done 
 done
 

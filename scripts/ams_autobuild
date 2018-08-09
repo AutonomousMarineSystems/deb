@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # don't restart if running
 num_running=$(/usr/bin/pgrep -c ams_autobuild)
 if [[ $num_running > 1 ]]; then
